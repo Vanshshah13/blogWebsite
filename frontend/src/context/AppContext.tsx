@@ -12,9 +12,9 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-const user_service = process.env.NEXT_PUBLIC_USER_SERVICE;
-const author_service = process.env.NEXT_PUBLIC_AUTHOR_SERVICE;
-const blog_service = process.env.NEXT_PUBLIC_BLOG_SERVICE;
+export const user_service = process.env.NEXT_PUBLIC_USER_SERVICE;
+export const author_service = process.env.NEXT_PUBLIC_AUTHOR_SERVICE;
+export const blog_service = process.env.NEXT_PUBLIC_BLOG_SERVICE;
 
 export const blogCategories = [
   "Techonlogy",
