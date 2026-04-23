@@ -155,31 +155,3 @@ export const getSavedBlog = TryCatch(async (req: AuthenticatedRequest, res) => {
 
   res.json(blogs);
 });
-
-export const getMyBlogs = TryCatch(async (req: AuthenticatedRequest, res) => {
-  const userId = req.user?._id;
-
-  if (!userId) {
-    res.status(401).json({
-      message: "Unauthorized",
-    });
-    return;
-  }
-
-  const cacheKey = `myblogs:${userId}`;
-
-  const cached = await redisClient.get(cacheKey);
-
-  if (cached) {
-    console.log("Serving my blogs from Redis cache");
-    res.json(JSON.parse(cached));
-    return;
-  }
-
-  const blogs =
-    await sql`SELECT * FROM blogs WHERE author = ${userId} ORDER BY create_at DESC`;
-
-  await redisClient.set(cacheKey, JSON.stringify(blogs), { EX: 3600 });
-
-  res.json(blogs);
-});
