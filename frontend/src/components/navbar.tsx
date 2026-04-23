@@ -48,7 +48,7 @@ const Navbar = () => {
             <li>
               <Link
                 href={"/blog/new"}
-                className="hover:text-yellow-400 transition text-lg"
+                className="hover:text-yellow-400 transition"
               >
                 Add Blog
               </Link>
