@@ -33,13 +33,13 @@ const LoginPage = () => {
         secure: true,
         path: "/",
       });
+
       toast.success(result.data.message);
       setIsAuth(true);
-      setLoading(false);
       setUser(result.data.user);
     } catch (error) {
-      console.log("error", error);
-      toast.error("Problem while login you");
+      toast.error("Login failed");
+    } finally {
       setLoading(false);
     }
   };
@@ -49,26 +49,46 @@ const LoginPage = () => {
     onError: responseGoogle,
     flow: "auth-code",
   });
+
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-[350px] m-auto mt-[200px]">
-          <Card className="w-[350px]">
-            <CardHeader>
-              <CardTitle>Login to The Reading Retreat</CardTitle>
-              <CardDescription>Your go to blog app</CardDescription>
+        <div className="bg-black min-h-screen flex items-center justify-center px-4 text-gray-300">
+          
+          <Card className="w-full max-w-md bg-black border border-yellow-500/20 shadow-[0_0_25px_rgba(250,204,21,0.15)]">
+            
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl font-bold text-yellow-400">
+                Welcome Back
+              </CardTitle>
+
+              <CardDescription className="text-white">
+                Login to The Reading Retreat
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Button onClick={googleLogin}>
-                Login with google{" "}
+
+            <CardContent className="flex flex-col gap-4">
+
+              <Button
+                onClick={googleLogin}
+                className="flex items-center justify-center gap-3 
+                bg-yellow-400 text-black hover:bg-yellow-300 
+                shadow-[0_0_10px_rgba(250,204,21,0.6)] transition"
+              >
                 <img
-                  src={"/google.png"}
-                  className="w-6 h-6"
+                  src="/google.png"
+                  className="w-5 h-5"
                   alt="google icon"
                 />
+                Continue with Google
               </Button>
+
+              <p className="text-center text-xs text-white">
+                Secure login powered by Google
+              </p>
+
             </CardContent>
           </Card>
         </div>

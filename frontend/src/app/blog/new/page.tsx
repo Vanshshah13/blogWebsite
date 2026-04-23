@@ -86,7 +86,7 @@ const AddBlog = () => {
       setContent("");
       setTimeout(() => {
         fetchBlogs();
-      }, 4000);
+      }, 2000);
     } catch (error) {
       toast.error("Error while adding blog");
     } finally {
@@ -95,6 +95,8 @@ const AddBlog = () => {
   };
 
   const [aiTitle, setAiTitle] = useState(false);
+  const [aiDescripiton, setAiDescription] = useState(false);
+  const [aiBlogLoading, setAiBlogLoading] = useState(false);
 
   const aiTitleResponse = async () => {
     try {
@@ -103,15 +105,12 @@ const AddBlog = () => {
         text: formData.title,
       });
       setFormData({ ...formData, title: data });
-    } catch (error) {
-      toast.error("Problem while fetching from ai");
-      console.log(error);
+    } catch {
+      toast.error("AI error");
     } finally {
       setAiTitle(false);
     }
   };
-
-  const [aiDescripiton, setAiDescription] = useState(false);
 
   const aiDescriptionResponse = async () => {
     try {
@@ -124,15 +123,12 @@ const AddBlog = () => {
         }
       );
       setFormData({ ...formData, description: data });
-    } catch (error) {
-      toast.error("Problem while fetching from ai");
-      console.log(error);
+    } catch {
+      toast.error("AI error");
     } finally {
       setAiDescription(false);
     }
   };
-
-  const [aiBlogLoading, setAiBlogLoading] = useState(false);
 
   const aiBlogResponse = async () => {
     try {
@@ -142,9 +138,8 @@ const AddBlog = () => {
       });
       setContent(data.html);
       setFormData({ ...formData, blogcontent: data.html });
-    } catch (error: any) {
-      toast.error("Problem while fetching from ai");
-      console.log(error);
+    } catch {
+      toast.error("AI error");
     } finally {
       setAiBlogLoading(false);
     }
@@ -153,128 +148,153 @@ const AddBlog = () => {
   const config = useMemo(
     () => ({
       readonly: false,
-      placeholder: "Start typings...",
+      placeholder: "Start typing...",
     }),
     []
   );
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <Card>
+    <div className="bg-black min-h-screen text-gray-300 flex justify-center items-center p-6">
+      <Card className="w-full max-w-4xl bg-black border border-yellow-500/20 shadow-[0_0_20px_rgba(250,204,21,0.1)]">
+        
         <CardHeader>
-          <h2 className="text-2xl font-bold">Add New Blog</h2>
+          <h2 className="text-2xl font-bold text-yellow-400 tracking-wide">
+            Add New Blog
+          </h2>
         </CardHeader>
+
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Label>Title</Label>
-            <div className="flex justify-center items-center gap-2">
-              <Input
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="Enter Blog title"
-                className={
-                  aiTitle ? "animate-pulse placeholder:opacity-60" : ""
-                }
-                required
-              />
-              {formData.title === "" ? (
-                ""
-              ) : (
-                <Button
-                  type="button"
-                  onClick={aiTitleResponse}
-                  disabled={aiTitle}
-                >
-                  <RefreshCw className={aiTitle ? "animate-spin" : ""} />
-                </Button>
-              )}
-            </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
 
-            <Label>Description</Label>
-            <div className="flex justify-center items-center gap-2">
-              <Input
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Enter Blog descripiton"
-                className={
-                  aiDescripiton ? "animate-pulse placeholder:opacity-60" : ""
-                }
-                required
-              />
-              {formData.title === "" ? (
-                ""
-              ) : (
-                <Button
-                  onClick={aiDescriptionResponse}
-                  type="button"
-                  disabled={aiDescripiton}
-                >
-                  <RefreshCw className={aiDescripiton ? "animate-spin" : ""} />
-                </Button>
-              )}
-            </div>
-
-            <Label>Category</Label>
-            <Select
-              onValueChange={(value: any) =>
-                setFormData({ ...formData, category: value })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue
-                  placeholder={formData.category || "Select category"}
+            {/* Title */}
+            <div>
+              <Label className="text-gray-400">Title</Label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  placeholder="Enter blog title"
+                  className="bg-black border border-yellow-500/20 text-gray-200 
+                  focus:border-yellow-400 focus:outline-none focus:ring-0 
+                  focus:shadow-[0_0_8px_rgba(250,204,21,0.6)]"
+                  required
                 />
-              </SelectTrigger>
-              <SelectContent>
-                {blogCategories?.map((e, i) => (
-                  <SelectItem key={i} value={e}>
-                    {e}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <div>
-              <Label>Image Upload</Label>
-              <Input type="file" accept="image/*" onChange={handleFileChange} />
+                {formData.title && (
+                  <Button
+                    type="button"
+                    onClick={aiTitleResponse}
+                    disabled={aiTitle}
+                    className="bg-yellow-400 text-black hover:bg-yellow-300"
+                  >
+                    <RefreshCw className={aiTitle ? "animate-spin" : ""} />
+                  </Button>
+                )}
+              </div>
             </div>
 
+            {/* Description */}
             <div>
-              <Label>Blog Content</Label>
+              <Label className="text-gray-400">Description</Label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  placeholder="Enter blog description"
+                  className="bg-black border border-yellow-500/20 text-gray-200 
+                  focus:border-yellow-400 focus:outline-none focus:ring-0 
+                  focus:shadow-[0_0_8px_rgba(250,204,21,0.6)]"
+                  required
+                />
+                {formData.title && (
+                  <Button
+                    type="button"
+                    onClick={aiDescriptionResponse}
+                    disabled={aiDescripiton}
+                    className="bg-yellow-400 text-black hover:bg-yellow-300"
+                  >
+                    <RefreshCw className={aiDescripiton ? "animate-spin" : ""} />
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {/* Category */}
+            <div>
+              <Label className="text-gray-400">Category</Label>
+              <Select
+                onValueChange={(value: any) =>
+                  setFormData({ ...formData, category: value })
+                }
+              >
+                <SelectTrigger className="bg-black border border-yellow-500/20 text-gray-200 focus:border-yellow-400">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent className="bg-black text-gray-300 border border-yellow-500/20">
+                  {blogCategories?.map((e, i) => (
+                    <SelectItem key={i} value={e} className="hover:bg-yellow-400 hover:text-black">
+                      {e}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Image */}
+            <div>
+              <Label className="text-gray-400">Image Upload</Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="bg-black border border-yellow-500/20 text-gray-300 file:text-yellow-400"
+              />
+            </div>
+
+            {/* Editor */}
+            <div>
               <div className="flex justify-between items-center mb-2">
-                <p className="text-sm text-muted-foreground">
-                  Paste you blog or type here. You can use rich text formatting.
-                  Please add image after improving your grammer
-                </p>
+                <Label className="text-gray-400">Blog Content</Label>
                 <Button
                   type="button"
-                  size={"sm"}
+                  size="sm"
                   onClick={aiBlogResponse}
                   disabled={aiBlogLoading}
+                  className="bg-yellow-400 text-black hover:bg-yellow-300"
                 >
                   <RefreshCw
                     size={16}
                     className={aiBlogLoading ? "animate-spin" : ""}
                   />
-                  <span className="ml-2">Fix Grammer</span>
+                  <span className="ml-2">Fix Grammar</span>
                 </Button>
               </div>
-              <JoditEditor
-                ref={editor}
-                value={content}
-                config={config}
-                tabIndex={1}
-                onBlur={(newContent) => {
-                  setContent(newContent);
-                  setFormData({ ...formData, blogcontent: newContent });
-                }}
-              />
+
+              <div className="border border-yellow-500/20 rounded-md overflow-hidden">
+                <JoditEditor
+                  ref={editor}
+                  value={content}
+                  config={config}
+                  tabIndex={1}
+                  onBlur={(newContent) => {
+                    setContent(newContent);
+                    setFormData({ ...formData, blogcontent: newContent });
+                  }}
+                />
+              </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Submitting" : "Submit"}
+            {/* Submit */}
+            <Button
+              type="submit"
+              className="w-full bg-yellow-400 text-black hover:bg-yellow-300 
+              shadow-[0_0_10px_rgba(250,204,21,0.6)]"
+              disabled={loading}
+            >
+              {loading ? "Submitting..." : "Submit Blog"}
             </Button>
+
           </form>
         </CardContent>
       </Card>
