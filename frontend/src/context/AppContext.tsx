@@ -67,7 +67,10 @@ interface AppContextType {
   blogLoading: boolean;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   searchQuery: string;
+
+  category: string; // ✅ ADD THIS
   setCategory: React.Dispatch<React.SetStateAction<string>>;
+
   fetchBlogs: () => Promise<void>;
   savedBlogs: SavedBlogType[] | null;
   getSavedBlogs: () => Promise<void>;
@@ -171,6 +174,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         logoutUser,
         blogs,
         blogLoading,
+        category,
         setCategory,
         setSearchQuery,
         searchQuery,
