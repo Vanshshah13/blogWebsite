@@ -47,6 +47,17 @@ const Navbar = () => {
           {isAuth && (
             <li>
               <Link
+                href={"/blog/new"}
+                className="hover:text-yellow-400 transition text-lg"
+              >
+                Add Blog
+              </Link>
+            </li>
+          )}
+
+          {isAuth && (
+            <li>
+              <Link
                 href={"/blog/saved"}
                 className="hover:text-yellow-400 transition"
               >
@@ -101,7 +112,7 @@ const Navbar = () => {
                 href={"/blog/new"}
                 className="hover:text-yellow-400 transition text-lg"
               >
-                Addd Blog
+                Add Blog
               </Link>
             </li>
           )}
