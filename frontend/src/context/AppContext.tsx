@@ -162,7 +162,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   async function fetchMyBlogs() {
     const token = Cookies.get("token");
-    console.log("Token : " , token);
+    
     setMyBlogsLoading(true);
 
     try {

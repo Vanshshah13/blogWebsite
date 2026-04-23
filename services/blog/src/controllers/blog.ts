@@ -157,7 +157,6 @@ export const getSavedBlog = TryCatch(async (req: AuthenticatedRequest, res) => {
 });
 
 export const getMyBlogs = TryCatch(async (req: AuthenticatedRequest, res) => {
-  console.log("USER : " , req.user)
   const userId = req.user?._id;
 
   if (!userId) {
