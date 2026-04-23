@@ -4,7 +4,6 @@ import {
   deleteComment,
   getAllBlogs,
   getAllComments,
-  getMyBlogs,
   getSavedBlog,
   getSingleBlog,
   saveBlog,
