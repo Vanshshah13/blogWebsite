@@ -21,7 +21,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
 }) => {
   return (
     <Link href={`/blog/${id}`}>
-      <Card className="overflow-hidden rounded-lg shadow-none transition-shadow duration-300 hover:shadow-xl border-none">
+      <Card className="bg-zinc-900 text-gray-300 overflow-hidden rounded-lg border border-zinc-800 transition duration-300 hover:shadow-xl hover:border-yellow-400 hover:shadow-[0_0_10px_rgba(250,204,21,0.6)]">
         <div className="w-full h-[200px]">
           <img src={image} alt={title} className="w-full h-full object-cover" />
         </div>
