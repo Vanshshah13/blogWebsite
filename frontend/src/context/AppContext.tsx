@@ -74,6 +74,10 @@ interface AppContextType {
   fetchBlogs: () => Promise<void>;
   savedBlogs: SavedBlogType[] | null;
   getSavedBlogs: () => Promise<void>;
+
+  myBlogs: Blog[] | null;
+  myBlogsLoading: boolean;
+  fetchMyBlogs: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -83,6 +87,8 @@ interface AppProviderProps {
 }
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
+  const [myBlogs, setMyBlogs] = useState<Blog[] | null>(null);
+  const [myBlogsLoading, setMyBlogsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -154,9 +160,36 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     toast.success("user Logged Out");
   }
 
+  async function fetchMyBlogs() {
+    const token = Cookies.get("token");
+    console.log("Token : " , token);
+    setMyBlogsLoading(true);
+
+    try {
+      const { data } = await axios.get(
+        `${blog_service}/api/v1/blog/my`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setMyBlogs(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setMyBlogsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchUser();
     getSavedBlogs();
+  }, []);
+
+  useEffect(() => {
+    fetchMyBlogs();
   }, []);
 
   useEffect(() => {
@@ -181,6 +214,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         fetchBlogs,
         savedBlogs,
         getSavedBlogs,
+        myBlogs,
+        myBlogsLoading,
+        fetchMyBlogs,
       }}
     >
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}>

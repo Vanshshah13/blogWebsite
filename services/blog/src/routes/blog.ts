@@ -4,6 +4,7 @@ import {
   deleteComment,
   getAllBlogs,
   getAllComments,
+  getMyBlogs,
   getSavedBlog,
   getSingleBlog,
   saveBlog,
@@ -13,6 +14,7 @@ import { isAuth } from "../middleware/isAuth.js";
 const router = express.Router();
 
 router.get("/blog/all", getAllBlogs);
+router.get("/blog/my", isAuth, getMyBlogs);
 router.get("/blog/:id", getSingleBlog);
 router.post("/comment/:id", isAuth, addComment);
 router.get("/comment/:id", getAllComments);
