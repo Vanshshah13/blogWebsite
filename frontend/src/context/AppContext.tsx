@@ -17,7 +17,7 @@ export const author_service = process.env.NEXT_PUBLIC_AUTHOR_SERVICE;
 export const blog_service = process.env.NEXT_PUBLIC_BLOG_SERVICE;
 
 export const blogCategories = [
-  "Technology",
+  "techonlogy",
   "Health",
   "Finance",
   "Travel",
