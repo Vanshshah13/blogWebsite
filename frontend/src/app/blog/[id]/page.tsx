@@ -217,7 +217,7 @@ async function handleDelete() {
               className="w-full h-64 object-cover rounded-lg mb-4 border border-yellow-500/20"
             />
 
-            <p className="text-gray-400 mb-4">{blog.description}</p>
+            <p className="text-gray-400 mb-4 text-xl text-yellow-200">{blog.description}</p>
 
             <div
               className="prose prose-invert max-w-none text-white"
