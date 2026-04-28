@@ -258,3 +258,24 @@ image tags, line breaks, and structural tags exactly as they are. Return the ful
 
   res.status(200).json({ html: cleanedHtml });
 });
+
+export const getMyBlogs = TryCatch(
+  async (req: AuthenticatedRequest, res) => {
+    const userId = req.user?._id;
+
+    if (!userId) {
+      res.status(401).json({
+        message: "Unauthorized",
+      });
+      return;
+    }
+
+    const blogs = await sql`
+      SELECT * FROM blogs 
+      WHERE author = ${userId}
+      ORDER BY create_at DESC
+    `;
+
+    res.json(blogs);
+  }
+);

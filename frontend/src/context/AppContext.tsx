@@ -74,6 +74,11 @@ interface AppContextType {
   fetchBlogs: () => Promise<void>;
   savedBlogs: SavedBlogType[] | null;
   getSavedBlogs: () => Promise<void>;
+
+  myBlogs: Blog[] | null;
+  myBlogLoading: boolean;
+  fetchMyBlogs: () => Promise<void>;
+  deleteBlog: (id: string) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -109,6 +114,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [blogLoading, setBlogLoading] = useState(true);
 
   const [blogs, setBlogs] = useState<Blog[] | null>(null);
+  const [myBlogs, setMyBlogs] = useState<Blog[] | null>(null);
+  const [myBlogLoading, setMyBlogLoading] = useState(false);
   const [category, setCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -154,6 +161,59 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     toast.success("user Logged Out");
   }
 
+  async function fetchMyBlogs() {
+    const token = Cookies.get("token");
+    setMyBlogLoading(true);
+
+    try {
+      const { data } = await axios.get(
+        `${author_service}/api/v1/blog/my`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setMyBlogs(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setMyBlogLoading(false);
+    }
+  }
+
+  async function deleteBlog(id: string) {
+    const token = Cookies.get("token");
+
+    try {
+      await axios.delete(`${author_service}/api/v1/blog/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // ✅ Update ALL states instantly
+
+      setBlogs((prev) =>
+        prev ? prev.filter((b) => b.id.toString() !== id.toString()) : null
+      );
+
+      setMyBlogs((prev) =>
+        prev ? prev.filter((b) => b.id.toString() !== id.toString()) : null
+      );
+
+      setSavedBlogs((prev) =>
+        prev ? prev.filter((s) => s.blogid.toString() !== id.toString()) : null
+      );
+
+      toast.success("Blog deleted");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete blog");
+    }
+  }
+
   useEffect(() => {
     fetchUser();
     getSavedBlogs();
@@ -181,6 +241,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         fetchBlogs,
         savedBlogs,
         getSavedBlogs,
+        myBlogs,
+        myBlogLoading,
+        fetchMyBlogs,
+        deleteBlog,
       }}
     >
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}>

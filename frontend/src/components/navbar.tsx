@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <nav className="bg-black border-b border-yellow-500/20 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center px-4 py-3">
-        
+
         {/* Logo */}
         <Link
           href={"/blogs"}
@@ -51,6 +51,17 @@ const Navbar = () => {
                 className="hover:text-yellow-400 transition"
               >
                 Add Blog
+              </Link>
+            </li>
+          )}
+
+          {isAuth && (
+            <li>
+              <Link
+                href={"/my-blogs"}
+                className="hover:text-yellow-400 transition"
+              >
+                My Blogs
               </Link>
             </li>
           )}
@@ -96,7 +107,7 @@ const Navbar = () => {
         )}
       >
         <ul className="flex flex-col items-center space-y-5 py-6 bg-black border-t border-yellow-500/10 text-gray-300">
-          
+
           <li>
             <Link
               href={"/blogs"}
@@ -113,6 +124,17 @@ const Navbar = () => {
                 className="hover:text-yellow-400 transition text-lg"
               >
                 Add Blog
+              </Link>
+            </li>
+          )}
+
+          {isAuth && (
+            <li>
+              <Link
+                href={"/my-blogs"}
+                className="hover:text-yellow-400 transition text-lg"
+              >
+                My Blogs
               </Link>
             </li>
           )}

@@ -124,29 +124,14 @@ const BlogPage = () => {
     }
   }
 
-  async function deleteBlog() {
-    if (!confirm("Delete this blog?")) return;
+const { deleteBlog } = useAppData();
 
-    try {
-      setLoading(true);
-      const token = Cookies.get("token");
+async function handleDelete() {
+  if (!confirm("Delete this blog?")) return;
 
-      const { data } = await axios.delete(
-        `${author_service}/api/v1/blog/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      toast.success(data.message);
-      router.push("/blogs");
-      fetchBlogs();
-    } catch {
-      toast.error("Delete failed");
-    } finally {
-      setLoading(false);
-    }
-  }
+  await deleteBlog(id as string);
+  router.push("/blogs");
+}
 
   async function saveBlog() {
     try {
@@ -216,7 +201,7 @@ const BlogPage = () => {
 
                   <Button
                     size="sm"
-                    onClick={deleteBlog}
+                    onClick={handleDelete}
                     className="bg-red-500 hover:bg-red-600 text-white"
                   >
                     <Trash2 />
